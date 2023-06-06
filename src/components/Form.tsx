@@ -1,54 +1,3 @@
-// import { useState } from 'react';
-
-// type FormProps = {
-//   cancelClick: () => void
-// };
-
-// export function Form({ cancelClick }: FormProps) {
-//   const [buttonEnabled, setButtonEnabled] = useState(false);
-
-//   return (
-//     <>
-//       <label htmlFor="nome">
-//         Nome do Serviço
-//         <input
-//           id="nome"
-//           type="text"
-//           name="Nome do Serviço"
-//         />
-//       </label>
-//       <label htmlFor="login">
-//         Login
-//         <input
-//           id="login"
-//           type="text"
-//           name="Login"
-//           required
-//         />
-//       </label>
-//       <label htmlFor="senha">
-//         Senha
-//         <input
-//           id="senha"
-//           type="password"
-//           name="Senha"
-//           required
-//         />
-//       </label>
-//       <label htmlFor="URL">
-//         URL
-//         <input
-//           id="URL"
-//           type="text"
-//           name="URL"
-//         />
-//       </label>
-//       <button>Cadastrar</button>
-//       <button onClick={ cancelClick }>Cancelar</button>
-//     </>
-//   );
-// }
-
 import { useState } from 'react';
 
 type FormProps = {
@@ -56,26 +5,26 @@ type FormProps = {
 };
 
 export function Form({ cancelClick }: FormProps) {
-  const [buttonEnabled, setButtonEnabled] = useState(false);
   const [nomeServico, setNomeServico] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
-  const verificarRequisitos = () => {
-    if (
-      nomeServico !== ''
+  const tamanhoMinimo = senha.length >= 8;
+  const tamanhoMaximo = senha.length <= 16;
+  const letrasENumeros = /[a-zA-Z]/.test(senha) && /[0-9]/.test(senha);
+  const caracteresEspeciais = /[!@#$%^&*]/.test(senha);
+
+  //  estado derivado -- pesquisar
+  const buttonEnabled = nomeServico !== ''
       && login !== ''
       && senha !== ''
-      && senha.length >= 8
-      && senha.length <= 16
-      && /[a-zA-Z]/.test(senha) // Verifica se a senha contém letras
-      && /[0-9]/.test(senha) // Verifica se a senha contém números
-      && /[!@#$%^&*]/.test(senha) // Verifica se a senha contém caracteres especiais
-    ) {
-      setButtonEnabled(true);
-    } else {
-      setButtonEnabled(false);
-    }
+      && tamanhoMinimo
+      && tamanhoMaximo
+      && letrasENumeros
+      && caracteresEspeciais;
+
+  const validacaoDaSenha = (condition: boolean) => {
+    return condition ? 'valid-password-check' : 'invalid-password-check';
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,9 +37,6 @@ export function Form({ cancelClick }: FormProps) {
     } else if (name === 'Senha') {
       setSenha(value);
     }
-
-    verificarRequisitos(); // Chama a função verificarRequisitos após cada alteração nos campos de entrada.
-    // se tudo estiver bem, muda os estado pra true e o botão habilita
   };
 
   return (
@@ -132,6 +78,18 @@ export function Form({ cancelClick }: FormProps) {
           name="URL"
         />
       </label>
+      <div className={ validacaoDaSenha(senha.length >= 8) }>
+        Possuir 8 ou mais caracteres
+      </div>
+      <div className={ validacaoDaSenha(senha.length <= 16) }>
+        Possuir até 16 caracteres
+      </div>
+      <div className={ validacaoDaSenha(/[a-zA-Z]/.test(senha) && /[0-9]/.test(senha)) }>
+        Possuir letras e números
+      </div>
+      <div className={ validacaoDaSenha(/[!@#$%^&*]/.test(senha)) }>
+        Possuir algum caractere especial
+      </div>
       <button disabled={ !buttonEnabled }>Cadastrar</button>
       <button onClick={ cancelClick }>Cancelar</button>
     </>
