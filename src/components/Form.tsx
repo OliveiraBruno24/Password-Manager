@@ -1,4 +1,8 @@
-export function Form() {
+type FormProps = {
+  cancelClick: () => void
+};
+
+export function Form({ cancelClick }: FormProps) {
   return (
     <>
       <label htmlFor="nome">
@@ -36,7 +40,7 @@ export function Form() {
         />
       </label>
       <button>Cadastrar</button>
-      <button>Cancelar</button>
+      <button onClick={ cancelClick }>Cancelar</button>
     </>
   );
 }

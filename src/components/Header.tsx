@@ -3,5 +3,6 @@ export function Header() {
     <h1>
       Gerenciador de senhas
     </h1>
+
   );
 }
