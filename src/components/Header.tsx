@@ -1,8 +1,11 @@
 export function Header() {
   return (
-    <h1>
-      Gerenciador de senhas
-    </h1>
+    <>
+      <h1>
+        Gerenciador de senhas
+      </h1>
+      <p>Nenhuma senha cadastrada</p>
+    </>
 
   );
 }

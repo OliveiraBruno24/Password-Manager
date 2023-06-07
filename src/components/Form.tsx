@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ServicoTypes } from './type';
 
 type FormProps = {
   cancelClick: () => void
@@ -8,6 +9,10 @@ export function Form({ cancelClick }: FormProps) {
   const [nomeServico, setNomeServico] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
+  const [exibirSenha, setExibirSenha] = useState(false);
+  const [URL, setUrl] = useState('');
+  const [cadastrado, setCadastrado] = useState(false);
+  const [servicosCadastrados, setServicosCadastrados] = useState<Array<ServicoTypes>>([]);
 
   const tamanhoMinimo = senha.length >= 8;
   const tamanhoMaximo = senha.length <= 16;
@@ -27,6 +32,33 @@ export function Form({ cancelClick }: FormProps) {
     return condition ? 'valid-password-check' : 'invalid-password-check';
   };
 
+  const handleMostrarSenha = () => {
+    setExibirSenha(!exibirSenha);
+  };
+
+  const linkDoServico = () => {
+    return (
+      <a href={ URL } target="_blank" rel="noopener noreferrer">
+        {nomeServico}
+      </a>
+    );
+  };
+
+  const handleCadastrarClick = () => {
+    if (nomeServico !== '') {
+      const novoServico = {
+        nome: nomeServico,
+        login,
+        senha,
+        url: URL,
+      };
+      setServicosCadastrados([...servicosCadastrados, novoServico]);
+      setCadastrado(true);
+    } else {
+      setCadastrado(false);
+    }
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
@@ -36,6 +68,8 @@ export function Form({ cancelClick }: FormProps) {
       setLogin(value);
     } else if (name === 'Senha') {
       setSenha(value);
+    } else if (name === 'URL') {
+      setUrl(value);
     }
   };
 
@@ -64,7 +98,7 @@ export function Form({ cancelClick }: FormProps) {
         Senha
         <input
           id="senha"
-          type="password"
+          type={ exibirSenha ? 'text' : 'password' }
           name="Senha"
           required
           onChange={ handleInputChange }
@@ -76,6 +110,7 @@ export function Form({ cancelClick }: FormProps) {
           id="URL"
           type="text"
           name="URL"
+          onChange={ handleInputChange }
         />
       </label>
       <div className={ validacaoDaSenha(senha.length >= 8) }>
@@ -90,8 +125,32 @@ export function Form({ cancelClick }: FormProps) {
       <div className={ validacaoDaSenha(/[!@#$%^&*]/.test(senha)) }>
         Possuir algum caractere especial
       </div>
-      <button disabled={ !buttonEnabled }>Cadastrar</button>
+      <button
+        disabled={ !buttonEnabled }
+        onClick={ handleCadastrarClick }
+      >
+        Cadastrar nova senha
+      </button>
+
       <button onClick={ cancelClick }>Cancelar</button>
+
+      {cadastrado && (
+        <>
+          <div>
+            {/* Login: */}
+            {login}
+          </div>
+          <div>
+            {/* Senha: */}
+            {senha}
+          </div>
+          <div>
+            {/* Nome do Serviço: */}
+            {' '}
+            { linkDoServico() }
+          </div>
+        </>
+      )}
     </>
   );
 }
