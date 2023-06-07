@@ -137,16 +137,12 @@ export function Form({ cancelClick }: FormProps) {
       {cadastrado && (
         <>
           <div>
-            {/* Login: */}
             {login}
           </div>
           <div>
-            {/* Senha: */}
             {senha}
           </div>
           <div>
-            {/* Nome do Serviço: */}
-            {' '}
             { linkDoServico() }
           </div>
         </>
