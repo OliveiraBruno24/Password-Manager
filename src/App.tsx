@@ -7,16 +7,26 @@ import { NewPassword } from './components/NewPassword';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
+  const [passwordsRegistered, setPasswordsRegistered] = useState(false);
+
+  const handlePasswordRegistered = () => {
+    setPasswordsRegistered(true);
+  };
 
   return (
     <div>
-      <Header />
-      { showForm
-        ? <Form cancelClick={ () => setShowForm(false) } />
-        : <NewPassword
-            clickPassword={ () => setShowForm(true) }
-            buttonName="Cadastrar nova Senha"
-        />}
+      <Header passwordsRegistered={ passwordsRegistered } />
+      { showForm ? (
+        <Form
+          cancelClick={ () => setShowForm(false) }
+          onPasswordRegistered={ handlePasswordRegistered }
+        />
+      ) : (
+        <NewPassword
+          clickPassword={ () => setShowForm(true) }
+          buttonName="Cadastrar nova Senha"
+        />
+      )}
     </div>
   );
 }

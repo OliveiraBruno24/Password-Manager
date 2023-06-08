@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { ServicoTypes } from './type';
 
+import '../App.css';
+
 type FormProps = {
-  cancelClick: () => void
+  cancelClick: () => void,
+  onPasswordRegistered: () => void
 };
 
-export function Form({ cancelClick }: FormProps) {
+export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
   const [nomeServico, setNomeServico] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
   const [exibirSenha, setExibirSenha] = useState(false);
   const [URL, setUrl] = useState('');
-  const [cadastrado, setCadastrado] = useState(false);
   const [servicosCadastrados, setServicosCadastrados] = useState<Array<ServicoTypes>>([]);
 
   const tamanhoMinimo = senha.length >= 8;
@@ -32,19 +34,12 @@ export function Form({ cancelClick }: FormProps) {
     return condition ? 'valid-password-check' : 'invalid-password-check';
   };
 
-  const handleMostrarSenha = () => {
-    setExibirSenha(!exibirSenha);
-  };
+  // const handleMostrarSenha = () => {
+  //   setExibirSenha(!exibirSenha);
+  // };
 
-  const linkDoServico = () => {
-    return (
-      <a href={ URL } target="_blank" rel="noopener noreferrer">
-        {nomeServico}
-      </a>
-    );
-  };
-
-  const handleCadastrarClick = () => {
+  const handleCadastrarClick = (event:React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (nomeServico !== '') {
       const novoServico = {
         nome: nomeServico,
@@ -53,9 +48,13 @@ export function Form({ cancelClick }: FormProps) {
         url: URL,
       };
       setServicosCadastrados([...servicosCadastrados, novoServico]);
-      setCadastrado(true);
-    } else {
-      setCadastrado(false);
+
+      setLogin('');
+      setNomeServico('');
+      setSenha('');
+      setUrl('');
+
+      onPasswordRegistered(); // muda para true, pq agr tem cadastro ativo
     }
   };
 
@@ -74,7 +73,7 @@ export function Form({ cancelClick }: FormProps) {
   };
 
   return (
-    <>
+    <form className="form-container" onSubmit={ handleCadastrarClick }>
       <label htmlFor="nome">
         Nome do Serviço
         <input
@@ -82,6 +81,7 @@ export function Form({ cancelClick }: FormProps) {
           type="text"
           name="Nome do Serviço"
           onChange={ handleInputChange }
+          value={ nomeServico }
         />
       </label>
       <label htmlFor="login">
@@ -92,6 +92,7 @@ export function Form({ cancelClick }: FormProps) {
           name="Login"
           required
           onChange={ handleInputChange }
+          value={ login }
         />
       </label>
       <label htmlFor="senha">
@@ -102,6 +103,7 @@ export function Form({ cancelClick }: FormProps) {
           name="Senha"
           required
           onChange={ handleInputChange }
+          value={ senha }
         />
       </label>
       <label htmlFor="URL">
@@ -111,6 +113,7 @@ export function Form({ cancelClick }: FormProps) {
           type="text"
           name="URL"
           onChange={ handleInputChange }
+          value={ URL }
         />
       </label>
       <div className={ validacaoDaSenha(senha.length >= 8) }>
@@ -126,27 +129,32 @@ export function Form({ cancelClick }: FormProps) {
         Possuir algum caractere especial
       </div>
       <button
+        type="submit"
         disabled={ !buttonEnabled }
-        onClick={ handleCadastrarClick }
       >
         Cadastrar nova senha
       </button>
 
       <button onClick={ cancelClick }>Cancelar</button>
-
-      {cadastrado && (
-        <>
-          <div>
-            {login}
-          </div>
-          <div>
-            {senha}
-          </div>
-          <div>
-            { linkDoServico() }
-          </div>
-        </>
-      )}
-    </>
+      <div className="container">
+        { servicosCadastrados.length > 0 ? (
+          <>
+            <div>
+              {servicosCadastrados.map((servico, index) => (
+                <div className="card" key={ index }>
+                  <div>{servico.login}</div>
+                  <div>{servico.senha}</div>
+                  <a href={ servico.url ?? '' } target="_blank" rel="noopener noreferrer">
+                    {servico.nome}
+                  </a>
+                </div>
+              )) }
+            </div>
+            <div />
+          </>
+        )
+          : null}
+      </div>
+    </form>
   );
 }

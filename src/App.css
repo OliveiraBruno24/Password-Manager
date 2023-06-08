@@ -5,3 +5,76 @@
 .invalid-password-check {
   color: #f58989;
 }
+
+input {
+  display: block;
+  max-width: 50%;
+}
+
+div {
+  display: block;
+}
+
+.form-container {
+  margin: 0;
+  width: 400px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-right: 500px;
+}
+
+.card {
+  background-color: #64a5d7;
+  border: 1px solid black;
+  border-radius: 8px;
+  color: black;
+  flex: 1 0 calc(50% - 10px);
+  margin-bottom: 5px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.card:nth-child( even ) {
+  background-color: #e0e0e0;
+}
+
+body {
+  background-color: #222;
+  color: white;
+}
+
+form {
+  margin: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+button {
+  margin-left: 10px;
+}
+
+.servico-info {
+  border-top: 1px solid white;
+  margin-top: 20px;
+  padding-top: 10px;
+}
+
+.servico-info div {
+  margin-bottom: 10px;
+}
+
+.servico-info a {
+  color: white;
+  text-decoration: none;
+}
+
+span {
+  display: inline;
+}
