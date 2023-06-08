@@ -3,4 +3,5 @@ export type ServicoTypes = {
   login:string
   senha:string
   url:string
+  id: string | number
 };

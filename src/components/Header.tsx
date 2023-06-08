@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-
 type HeaderProps = {
   passwordsRegistered: boolean;
 };
@@ -18,6 +15,4 @@ export function Header({ passwordsRegistered }: HeaderProps) {
   );
 }
 
-// context api
-
-// tenho que fazer a msg sumir quando clico no botão e cadastro um novo serviço
+// context api -- pesquisar

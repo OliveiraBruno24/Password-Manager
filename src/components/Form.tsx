@@ -46,6 +46,7 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
         login,
         senha,
         url: URL,
+        id: Date.now(),
       };
       setServicosCadastrados([...servicosCadastrados, novoServico]);
 
@@ -72,6 +73,12 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
     }
   };
 
+  const handeDeleteService = (id:string | number) => {
+    const filterService = servicosCadastrados.filter((service) => service.id !== id);
+
+    setServicosCadastrados(filterService);
+  };
+
   return (
     <form className="form-container" onSubmit={ handleCadastrarClick }>
       <label htmlFor="nome">
@@ -90,7 +97,7 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
           id="login"
           type="text"
           name="Login"
-          required
+          // required
           onChange={ handleInputChange }
           value={ login }
         />
@@ -101,7 +108,7 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
           id="senha"
           type={ exibirSenha ? 'text' : 'password' }
           name="Senha"
-          required
+          // required
           onChange={ handleInputChange }
           value={ senha }
         />
@@ -131,6 +138,7 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
       <button
         type="submit"
         disabled={ !buttonEnabled }
+
       >
         Cadastrar nova senha
       </button>
@@ -147,13 +155,20 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
                   <a href={ servico.url ?? '' } target="_blank" rel="noopener noreferrer">
                     {servico.nome}
                   </a>
+                  <button
+                    data-testid="remove-btn"
+                    onClick={ () => handeDeleteService(servico.id) }
+                  >
+                    X
+
+                  </button>
                 </div>
               )) }
             </div>
             <div />
           </>
         )
-          : null}
+          : 'nenhuma senha cadastrada'}
       </div>
     </form>
   );
