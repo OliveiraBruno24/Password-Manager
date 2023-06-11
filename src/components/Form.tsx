@@ -34,9 +34,9 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
     return condition ? 'valid-password-check' : 'invalid-password-check';
   };
 
-  // const handleMostrarSenha = () => {
-  //   setExibirSenha(!exibirSenha);
-  // };
+  const handleMostrarSenha = () => {
+    setExibirSenha(!exibirSenha);
+  };
 
   const handleCadastrarClick = (event:React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,6 +112,13 @@ export function Form({ cancelClick, onPasswordRegistered }: FormProps) {
           onChange={ handleInputChange }
           value={ senha }
         />
+        <button
+          onClick={ handleMostrarSenha }
+          data-testid="show-hide-form-password"
+        >
+          MostrarSenha
+
+        </button>
       </label>
       <label htmlFor="URL">
         URL
